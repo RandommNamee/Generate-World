@@ -1,0 +1,42 @@
+.block {
+	width: 16px;
+	height: 16px;
+	position: absolute;
+}
+
+.grass {
+	background-color: green;
+}
+
+.dirt {
+	background-color: sienna;
+}
+
+.stone {
+	background-color: gray;
+}
+
+.log {
+	background-color: brown;
+}
+
+.leaves {
+	background-color: lightgreen;
+}
+
+.coal_ore {
+	background-color: dimgray;
+}
+
+.iron_ore {
+	background-color: indianred;
+}
+
+#worldContainer {
+	width: 1424px;
+	height: 800px;
+	position: absolute;
+	border: 1px outset red;
+}
+
+
