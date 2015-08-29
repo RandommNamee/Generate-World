@@ -1,20 +1,39 @@
 document.addEventListener('DOMContentLoaded', function () {
 	genWorld();
-	
+	movePlayer(Game.playerStart.x, Game.playerStart.y);
+	setInterval(function() {
+		if (!Game.stopped) {	
+			Game.loop();
+		}	
+	},Game.speed)
 });
 
 var Game = {
+	playerStart: {
+		x: 784 + "px",
+		y: 200 + "px",
+	},
+	stopped: false,
+	speed: 10,
+	fallingSpeed: 1,
 	height: (800 / 16) - 1,
 	width: (1424 / 16) - 1,
 	blockCount: 0,
 	world: new Array(),
+	player: new Array(),
+	playerSize: 16,
 	blockId: ["grass", "dirt", "stone", "log", "leaves", "coal_ore", "iron_ore"],
 	layers: {
 		dirt: 3,
 		log: 6,
 		leaves: 5
-	}
+	},
 };
+Game.loop = function() {
+	gravity();
+}
+
+
 
 function genWorld() {
 	for (var h = 0; h <= Game.height; h++) {
@@ -132,8 +151,33 @@ function genLeaves(l, h, c) {
 	x.className += " " + Game.blockId[4];
 }
 
+function movePlayer(x, y) {
+	var p = document.getElementById("player");
+	p.style.bottom = x;
+	p.style.left = y;
+}
 
-
+function gravity() { 
+	var p = document.getElementById("player");
+	var b = Game.world[Math.round((parseInt(p.style.bottom) - Game.playerSize / 2) / 16)][Math.round(parseInt(p.style.left) / 16)];
+	var c = parseInt(p.style.bottom);
+	if (!b.blockType) {
+		if (Game.fallingSpeed <= 8) {
+			c -= Game.fallingSpeed;
+			c += "px"
+			Game.fallingSpeed += Game.fallingSpeed / 80;
+		} else {
+			c -= Game.fallingSpeed;
+			c += "px"
+		}
+	} else {
+		c += Math.round(Game.fallingSpeed );
+		c += "px";
+		Game.fallingSpeed = 1;
+	}
+	p.style.bottom = c;
+}
+ 
 
 
 
