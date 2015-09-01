@@ -35,8 +35,13 @@
 #worldContainer {
 	width: 1920px;
 	height: 800px;
-	position: absolute;
-	border: 1px solid blue;
+	position: relative;
+	border: 1px outset red;
 }
 
-
+#player {
+	width: 16px;
+	height: 16px;
+	background-color: black;
+	position: absolute;
+}
