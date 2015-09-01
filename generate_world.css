@@ -5,7 +5,7 @@
 }
 
 .grass {
-	background-color: green;
+	background-image: url("grass.png");
 }
 
 .dirt {
@@ -33,10 +33,10 @@
 }
 
 #worldContainer {
-	width: 1424px;
+	width: 1920px;
 	height: 800px;
 	position: absolute;
-	border: 1px outset red;
+	border: 1px solid blue;
 }
 
 

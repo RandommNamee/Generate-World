@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 var Game = {
 	height: (800 / 16) - 1,
-	width: (1424 / 16) - 1,
+	width: (1920 / 16) - 1,
 	blockCount: 0,
 	world: new Array(),
 	blockId: ["grass", "dirt", "stone", "log", "leaves", "coal_ore", "iron_ore"],
