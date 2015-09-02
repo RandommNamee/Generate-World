@@ -32,6 +32,10 @@
 	background-color: indianred;
 }
 
+.hide {
+	display: none;
+}
+
 #worldContainer {
 	width: 1920px;
 	height: 800px;
