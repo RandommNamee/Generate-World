@@ -5,11 +5,11 @@
 }
 
 .grass {
-	background-color: green;
+	background-image: images/grass.png;
 }
 
 .dirt {
-	background-color: sienna;
+	background-image: images/dirt.png;
 }
 
 .stone {
@@ -17,7 +17,7 @@
 }
 
 .log {
-	background-color: brown;
+	background-image: images/log.png;
 }
 
 .leaves {

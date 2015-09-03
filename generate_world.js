@@ -67,7 +67,7 @@ function genChunk(w) {
 }
 
 function genFloor(w) {
-	var random = Math.round((Game.height / 2) + (Math.random() * 10 - 5));
+	var random = Math.round((Game.fieldHeight / 2) + (Math.random() * 10 - 5));
 	var h = 0; 
 	for (var f = 0; f <= Game.world[w][random].length - 1; f++) {
 		Game.world[w][random][f].blockType = "grass"
@@ -88,7 +88,7 @@ function genFloor(w) {
 
 function genOre(w) {
 	for (var l = 0; l <= Game.fieldLength; l++) {
-		for (var h = 0; h <= Game.height; h++) {
+		for (var h = 0; h <= Game.fieldHeight; h++) {
 			var random = Math.random() * 100
 			if (random >= 99.5) {
 				genIron(w, h, l);
@@ -117,7 +117,7 @@ function genIron(w, h, l) {
 
 function genTrees(w) {
 	for (var l = 0; l <= Game.fieldLength; l++) {
-		for (var h = 0; h <= Game.fieldLeight; h++) {
+		for (var h = 0; h <= Game.fieldHeight; h++) {
 			tree(w, l, h);
 		}
 	}
@@ -126,7 +126,7 @@ function genTrees(w) {
 
 function tree(w, l, h) {
 	var random = Math.round(Math.random() * 100);
-	if (random >= 90 && Game.world[w][h][l].blockType == "grass" && l > 1 && l < Game.length - 2) {
+	if (random >= 90 && Game.world[w][h][l].blockType == "grass" && l > 1 && l < Game.fieldLength - 2) {
 		firstLog(w, l, h);
 		for (var c = 0; c <= Game.layers.log + Math.round(Math.random() * 6 - 3); c++) {
 			if (c <= Math.round(Math.random() * 2)) {
