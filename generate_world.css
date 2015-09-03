@@ -5,11 +5,11 @@
 }
 
 .grass {
-	background-image: url("images/grass.png");
+	background-color: green;
 }
 
 .dirt {
-	background-image: url("images/dirt.png");
+	background-color: sienna;
 }
 
 .stone {
@@ -17,7 +17,7 @@
 }
 
 .log {
-	background-image: url("images/log.png");
+	background-color: brown;
 }
 
 .leaves {
@@ -37,7 +37,7 @@
 }
 
 #worldContainer {
-	width: 1920px;
+	width: 1424px;
 	height: 800px;
 	position: relative;
 	border: 1px outset red;
@@ -49,3 +49,4 @@
 	background-color: black;
 	position: absolute;
 }
+

@@ -17,13 +17,9 @@ var Game = {
 	stopped: false,
 	speed: 10,
 	fallingSpeed: 1,
-	height: (800 / 16) - 1,
-<<<<<<< HEAD
-	width: (1920 / 16) - 1,
-=======
-	length: (1424 / 16) - 1,
-	width: (800 / 16) - 1,
->>>>>>> origin/master
+	fieldHeight: (800 / 16) - 1,
+	fieldLength: (1424 / 16) - 1,
+	fieldWidth: (800 / 16) - 1,
 	blockCount: 0,
 	world: new Array(),
 	entitys: [{id: "player", inventory: new Array}],
@@ -39,7 +35,7 @@ Game.loop = function() {
 }
 
 function genWorld() {
-	for (var w = 0; w <= Game.width; w++) {
+	for (var w = 0; w <= Game.fieldWidth; w++) {
 		Game.world[w] = new Array();
 		var c = document.createElement("div");
 		document.getElementById("worldContainer").appendChild(c);
@@ -55,9 +51,9 @@ function genWorld() {
 }
 
 function genChunk(w) {
-	for (var h = 0; h <= Game.height; h++) {
+	for (var h = 0; h <= Game.fieldHeight; h++) {
 		Game.world[w][h] = new Array();
-		for (var l = 0; l <= Game.length; l++) {
+		for (var l = 0; l <= Game.fieldLength; l++) {
 			var b = document.createElement("div");
 			Game.blockCount += 1;
 			document.getElementById("chunk" + w).appendChild(b);
@@ -91,7 +87,7 @@ function genFloor(w) {
 }
 
 function genOre(w) {
-	for (var l = 0; l <= Game.length; l++) {
+	for (var l = 0; l <= Game.fieldLength; l++) {
 		for (var h = 0; h <= Game.height; h++) {
 			var random = Math.random() * 100
 			if (random >= 99.5) {
@@ -120,8 +116,8 @@ function genIron(w, h, l) {
 }
 
 function genTrees(w) {
-	for (var l = 0; l <= Game.length; l++) {
-		for (var h = 0; h <= Game.height; h++) {
+	for (var l = 0; l <= Game.fieldLength; l++) {
+		for (var h = 0; h <= Game.fieldLeight; h++) {
 			tree(w, l, h);
 		}
 	}
