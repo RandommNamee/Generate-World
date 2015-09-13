@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 	genWorld();
-	movePlayer(Game.playerStart.x, Game.playerStart.y);
+	createChunkAbove();
+	movePlayer(Game.playerPos.x, Game.playerPos.y);
 	setInterval(function() {
 		if (!Game.stopped) {	
 			Game.loop();
@@ -9,14 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 var Game = {
-	playerStart: {
+	playerPos: {
 		x: 784 + "px",
 		y: 200 + "px",
 		z: 0
 	},
 	stopped: false,
-	speed: 10,
-	fallingSpeed: 1,
+	speed: 1,
 	fieldHeight: (800 / 16) - 1,
 	fieldLength: (1424 / 16) - 1,
 	fieldWidth: (800 / 16) - 1,
@@ -33,6 +33,50 @@ var Game = {
 Game.loop = function() {
 	gravity();
 }
+var swi = true;
+var fallingSpeed = 1;
+
+document.addEventListener("keydown", function(event) {
+	if (event.keyIdentifier == "Down"  && swi) {
+		if (Game.playerPos.z > 0) {
+			document.getElementById("chunk" + Game.playerPos.z).className = "hide";
+			Game.playerPos.z -= 1;
+			document.getElementById("chunk" + Game.playerPos.z).className = "";
+		} else {
+			document.getElementById("chat").innerHTML = "You can't go in this direction";
+		}
+	}
+});
+
+document.addEventListener("keydown", function(event) {
+	if (event.keyIdentifier == "Up" && swi) {
+		if (Game.playerPos.z < Game.world.length - 1) {
+			document.getElementById("chunk" + Game.playerPos.z).className = "hide";
+			Game.playerPos.z += 1;
+			document.getElementById("chunk" + Game.playerPos.z).className = ""
+		} else {
+			document.getElementById("chat").innerHTML = "You can't go in this direction";
+		}
+	}
+});
+
+
+document.addEventListener("keydown", function(event) {
+	if (event.keyIdentifier == "U+0051") {
+		if (swi) {
+			document.getElementById("chunk" + Game.playerPos.z).className = "hide";
+			document.getElementById("chunkAbove").className = "";
+			swi = false;
+		} else {
+			console.log(Game);
+			document.getElementById("chunkAbove").className = "hide";
+			document.getElementById("chunk" + Game.playerPos.z).className = "";
+			swi = true;
+		}
+	}
+});
+
+
 
 function genWorld() {
 	for (var w = 0; w <= Game.fieldWidth; w++) {
@@ -50,7 +94,7 @@ function genWorld() {
 	}
 }
 
-function genChunk(w) {
+function genChunk(w) {	
 	for (var h = 0; h <= Game.fieldHeight; h++) {
 		Game.world[w][h] = new Array();
 		for (var l = 0; l <= Game.fieldLength; l++) {
@@ -70,20 +114,31 @@ function genFloor(w) {
 	var random = Math.round((Game.fieldHeight / 2) + (Math.random() * 10 - 5));
 	var h = 0; 
 	for (var f = 0; f <= Game.world[w][random].length - 1; f++) {
-		Game.world[w][random][f].blockType = "grass"
-		random += Math.round(Math.random() * 2 - 1)
+		random2 = Math.round(Math.random() * 2 - 1);
+		if (random2 = 1) {
+			Game.world[w][random][f].blockType = "grass";
+			random += Math.round(Math.random() * 2 - 1);
+		} else if (random2 = -1){
+			random += Math.round(Math.random() * 2 - 1);
+			Game.world[w][random][f].blockType = "grass";
+		}
 		document.getElementById(Game.world[w][random][f].id).className += " " + Game.blockId[0];
 		for (var d = 1; d <= Game.layers.dirt; d++) {
-			Game.world[w][random - d][f].blockType = "dirt";
-			document.getElementById(Game.world[w][random - d][f].id).className += " " + Game.blockId[1];
-			var h = d;
+			if (random >= d) {
+				Game.world[w][random - d][f].blockType = "dirt";
+				document.getElementById(Game.world[w][random - d][f].id).className += " " + Game.blockId[1];
+				var h = d;
+			} else {
+				Game.world[w][0][f].blockType = "dirt";
+				document.getElementById(Game.world[w][0][f].id).className += " " + Game.blockId[1];
+				var h = random;
+			} 
 		}
 		for (var s = h + 1; s <= random; s++) {
 			Game.world[w][random - s][f].blockType = "stone";
 			document.getElementById(Game.world[w][random - s][f].id).className += " " + Game.blockId[2];
 		}
 	}
-
 }
 
 function genOre(w) {
@@ -126,7 +181,7 @@ function genTrees(w) {
 
 function tree(w, l, h) {
 	var random = Math.round(Math.random() * 100);
-	if (random >= 90 && Game.world[w][h][l].blockType == "grass" && l > 1 && l < Game.fieldLength - 2) {
+	if (random >= 98 && Game.world[w][h][l].blockType == "grass" && l > 1 && l < Game.fieldLength - 2) {
 		firstLog(w, l, h);
 		for (var c = 0; c <= Game.layers.log + Math.round(Math.random() * 6 - 3); c++) {
 			if (c <= Math.round(Math.random() * 2)) {
@@ -145,18 +200,35 @@ function firstLog(w, l, h) {
 }
 
 function genTrunk(w, l, h, c) {
-	Game.world[w][h + 1 + c][l - 1].blockType = "log";
-	b = document.getElementById(Game.world[w][h + 1 + c][l - 1].id);
-	b.className += " " + Game.blockId[3];
+	hl = h + 1 + c;
+	if (hl <= 49) {
+		Game.world[w][hl][l - 1].blockType = "log";
+		b = document.getElementById(Game.world[w][hl][l - 1].id);
+		b.className += " " + Game.blockId[3];
+	} else {
+		Game.world[w][49][l - 1].blockType = "log";
+		b = document.getElementById(Game.world[w][49][l - 1].id);
+		b.className += " " + Game.blockId[3];
+	}
 }
 
 function genLeaves(w, l, h, c) { 
-	Game.world[w][h + 1 + c][l].blockType = "leaves";
-	Game.world[w][h + 1 + c][l - 2].blockType = "leaves";
-	Game.world[w][h + 1 + c][l - 1].blockType = "leaves";
-	document.getElementById(Game.world[w][h + 1 + c][l].id).className += " " + Game.blockId[4];
-	document.getElementById(Game.world[w][h + 1 + c][l - 2].id).className += " " + Game.blockId[4];
-	document.getElementById(Game.world[w][h + 1 + c][l - 1].id).className += " " + Game.blockId[4];
+	var hl = h + 1 + c;
+	if (hl <= 49) { 
+		Game.world[w][hl][l].blockType = "leaves";
+		Game.world[w][hl][l - 2].blockType = "leaves";
+		Game.world[w][hl][l - 1].blockType = "leaves";
+		document.getElementById(Game.world[w][hl][l].id).className += " " + Game.blockId[4];
+		document.getElementById(Game.world[w][hl][l - 2].id).className += " " + Game.blockId[4];
+		document.getElementById(Game.world[w][hl][l - 1].id).className += " " + Game.blockId[4];
+	} else {
+		Game.world[w][49][l].blockType = "leaves";
+		Game.world[w][49][l - 2].blockType = "leaves";
+		Game.world[w][49][l - 1].blockType = "leaves";
+		document.getElementById(Game.world[w][49][l].id).className += " " + Game.blockId[4];
+		document.getElementById(Game.world[w][49][l - 2].id).className += " " + Game.blockId[4];
+		document.getElementById(Game.world[w][49][l - 1].id).className += " " + Game.blockId[4];
+	}
 }
 
 function movePlayer(x, y) {
@@ -167,26 +239,43 @@ function movePlayer(x, y) {
 
 function gravity() { 
 	for (var i = 0; i <= Game.entitys.length - 1; i++) {
-		var p = document.getElementById(Game.entitys[i].id);
-		var b = Game.world[Game.playerStart.z][Math.round((parseInt(p.style.bottom) - Game.playerSize / 2) / 16)][Math.round(parseInt(p.style.left) / 16)];
-		var c = parseInt(p.style.bottom);
-		if (!b.blockType) {	
-			if (Game.fallingSpeed <= 8) {
-				c -= Game.fallingSpeed;
-				Game.fallingSpeed += Game.fallingSpeed / 80;
+		var ent = document.getElementById(Game.entitys[i].id);
+		var pos = Game.world[Game.playerPos.z][Math.round((parseInt(ent.style.bottom) - Game.playerSize / 2) / 16)][Math.round(parseInt(ent.style.left) / 16)];
+		var c = parseInt(ent.style.bottom);
+		if (!pos.blockType) {	
+			if (fallingSpeed <= 6) {
+				c -= fallingSpeed;
+				fallingSpeed += fallingSpeed / 80;
 			} else {
-				c -= Game.fallingSpeed;
+				c -= fallingSpeed;
 			}
 		} else {
-			c += Math.round(Game.fallingSpeed - 1);
-			Game.fallingSpeed = 1;
+			c += Math.round(fallingSpeed) - 1;
+			fallingSpeed = 1;
 		}
 		c += "px"
-		p.style.bottom = c;
-	};
+		ent.style.bottom = c;
+	}
 }
- 
 
+function createChunkAbove() {
+	for (var w = 0; w <= Game.fieldWidth; w++) { 
+		for (var l = 0; l <= Game.fieldLength; l++) {
+			var blockHTML = 0;
+			for (var h = Game.fieldHeight - 1;blockHTML == 0; h--) {
+				var blockJS = Game.world[w][h][l];
+				if (blockJS.blockType) {
+					blockHTML = document.createElement("div");
+					document.getElementById("chunkAbove").appendChild(blockHTML);
+					blockHTML.id = blockJS.id;
+					blockHTML.className += "block " + blockJS.blockType;
+					blockHTML.style.bottom = (w * 16) + "px";
+					blockHTML.style.left = (l * 16) + "px";
+				}
+			}
+		}
+	}
+}
 
 
 

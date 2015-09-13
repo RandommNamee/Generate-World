@@ -5,11 +5,11 @@
 }
 
 .grass {
-	background-image: images/grass.png;
+	background-image: url("images/grass.png");
 }
 
 .dirt {
-	background-image: images/dirt.png;
+	background-image: url("images/dirt.png");
 }
 
 .stone {
@@ -17,7 +17,7 @@
 }
 
 .log {
-	background-image: images/log.png;
+	background-image: url("images/log.png");
 }
 
 .leaves {
@@ -45,7 +45,7 @@
 
 #player {
 	width: 16px;
-	height: 16px;
+	height: 17px;
 	background-color: black;
 	position: absolute;
 }
